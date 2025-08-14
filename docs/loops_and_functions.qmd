@@ -1,0 +1,64 @@
+---
+title: "loops_and_functions"
+format: html
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,  message = FALSE, warning = FALSE)
+
+library(tidyverse)
+```
+
+```{r}
+#Task 1
+
+weekdays <- c("Monday", "Tuesday", "Wednesday", "Thursay", "Friday", "Saturday",
+              "Sunday")
+
+transects <- c("Transect A", "Transect B", "Transect C")
+
+out_matrix <- matrix(nrow = length(weekdays), ncol = length(transects))
+
+for (i in seq_along(weekdays)) {
+  for (j in seq_along(transects)){
+    m <- paste0(weekdays[i], "-", transects[j])
+    out_matrix[i,j] <- m
+  }
+}
+print(out_matrix)
+```
+
+```{r}
+#Task 2
+force <- function(m, a){
+  W <- m * a
+  print(paste0("The resulting force is ", W , " Newtons."))
+}
+
+force(m = 50, a = 8.9)
+```
+
+```{r}
+#Task 3
+fish_parms <- data.frame(sci_name = c("Chanos chanos", "Sphyraena barracuda", "Caranx ignobilis"), 
+                         common_name = c("Milkfish", "Great barracuda", "Giant trevally"),
+                         a_est = c(0.0905, 0.0181, 0.0353),
+                         b_est = c(2.52, 3.27, 3.05))
+View(fish_parms)
+
+#W = a * L^b
+fish_weight <- function(fish_name, tot_length) {
+  if(fish_name == "Milkfish") {
+    print(.0905 * (tot_length)^2.52)
+  } if else(fish_name == "Great barracuda") {
+    print(.0181 * (tot_length)^3.27)
+  } if else (fish_name == "Giant trevally") {
+    print(.0353 * (tot_length)^3.05)
+  }
+}
+```
+
+```{r}
+#Task 4
+```
+
