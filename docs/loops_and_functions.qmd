@@ -4,7 +4,7 @@ format: html
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE,  message = FALSE, warning = FALSE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
 
 library(tidyverse)
 ```
@@ -47,18 +47,79 @@ fish_parms <- data.frame(sci_name = c("Chanos chanos", "Sphyraena barracuda", "C
 View(fish_parms)
 
 #W = a * L^b
+# function
 fish_weight <- function(fish_name, tot_length) {
-  if(fish_name == "Milkfish") {
-    print(.0905 * (tot_length)^2.52)
-  } if else(fish_name == "Great barracuda") {
-    print(.0181 * (tot_length)^3.27)
-  } if else (fish_name == "Giant trevally") {
-    print(.0353 * (tot_length)^3.05)
+  
+  # Filter the data frame for the matching common name
+  fish_row <- fish_parms[fish_parms$common_name == fish_name, ]
+  
+  # Check if the fish was found
+  if (nrow(fish_row) == 0) {
+    stop("Fish name not found. Please check your spelling.")
   }
+  
+  # Extract a and b estimates
+  a <- fish_row$a_est
+  b <- fish_row$b_est
+  
+  # Calculate weight in grams
+  weight <- a * (tot_length ^ b) 
+  
+  #return weight value
+  return(round(weight, 2))
 }
+
+fish_weight("Milkfish", 50)
+fish_weight("Great barracuda", 80)
+fish_weight("Giant trevally", 100)
+```
+
+```{r}
+#Task 3 pt 2
+milkfish_lengths <- seq(from = 0, to = 100, by = 1)
+
+milkfish_weights <- fish_weight("Milkfish", milkfish_lengths)
+print(milkfish_weights)
+
 ```
 
 ```{r}
 #Task 4
+wave_power <- function(wave_height, wave_period) {
+  
+  #calculate wave power
+  potential_power <- 0.5 * (wave_height)^2 * wave_period
+  return(potential_power)
+}
+
+#range of wave heights from 0 to 3 meters by increments of 0.2 meters
+wave_heights <- seq(from = 0, to = 3, by = 0.2)
+
+wave_powers <- wave_power(wave_height = wave_heights, wave_period = 8)
+
+# Print the result
+print(wave_powers)
+```
+```{r}
+#Task 5
+brenville_wave_power <- function(water_depth, wave_height, wave_period) {
+  
+  if (water_depth > 12) {
+    # Deep water equation
+    message("Using deep water wave power equation.")
+    potential_power <- 0.5 * (wave_height)^2 * wave_period
+  } else {
+    # Shallow water equation
+    message("Using shallow water wave power equation.")
+    potential_power <- 0.81 * (wave_height)^2 * wave_period  # Adjusted coefficient for shallow conditions
+  }
+  
+  return(potential_power)
+}
+
+
+brenville_wave_power(water_depth = 15, wave_height = 2, wave_period = 8)
+
+brenville_wave_power(water_depth = 10, wave_height = 2, wave_period = 8)
 ```
 
